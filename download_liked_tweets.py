@@ -337,7 +337,7 @@ if __name__ == "__main__":
         args, vals = getopt.getopt(
             sys.argv[1:],
             "u:f:p:iv",
-            ["user=", "folder=", "page_token=", "ignore-processed", "no-verbose"]
+            ["user=", "folder=", "page-token=", "ignore-processed", "no-verbose"]
         )
 
         a_num = 0
@@ -346,7 +346,7 @@ if __name__ == "__main__":
                 user = v
             elif a in ("-f", "--folder"):
                 folder = v
-            elif a in ("-p", "--page_token"):
+            elif a in ("-p", "--page-token"):
                 page_token = v
             elif a in ("-i", "--ignore-processed"):
                 ignore_processed = True
