@@ -337,7 +337,7 @@ if __name__ == "__main__":
         args, vals = getopt.getopt(
             sys.argv[1:],
             "u:f:p:iv",
-            ["user=", "folder=", "page-token=", "ignore-processed", "no-verbose"]
+            ["user=", "folder=", "page-token=", "ignore-processed", "verbose"]
         )
 
         a_num = 0
@@ -350,7 +350,7 @@ if __name__ == "__main__":
                 page_token = v
             elif a in ("-i", "--ignore-processed"):
                 ignore_processed = True
-            elif a in ("-v", "--no-verbose"):
+            elif a in ("-v", "--verbose"):
                 verbose = True
     except getopt.error as err:
         print(str(err))
