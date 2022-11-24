@@ -36,14 +36,6 @@ if not isinstance(creds, dict) or not mutils.is_sublist(list(creds.keys()), cred
 
 
 """
-Quick utils
-"""
-
-
-
-
-
-"""
 File-related
 """
 
@@ -362,4 +354,6 @@ if __name__ == "__main__":
                 verbose = True
     except getopt.error as err:
         print(str(err))
+    if user == None:
+        raise ValueError("A username is required!")
     main(user, folder, page_token, ignore_processed, verbose)
