@@ -156,10 +156,15 @@ def download_img(url: str, fname: str, tweet_url = None):
         The filepath to save the image to.
     """
     i_res = requests.get(url, stream=True)
+    final_slash = mutils.index_of_last_slash(fname)
+    abb_fname = fname if final_slash == -1 else fname[final_slash + 1:]
     if i_res.status_code == 200:
         with open(fname, "wb") as f:
             shutil.copyfileobj(i_res.raw, f)
-        mutils.printv("Image downloaded: %s"%(fname), verbose=is_verbose)
+        msg = "Image downloaded: %s"%(abb_fname)
+        if tweet_url != None:
+            msg += "\n    from " + tweet_url
+        mutils.printv("Image downloaded: %s"%(abb_fname), verbose=is_verbose)
         return True
 
     err_msg = "Image could not be retrieved: URL(%s)"%(url)
@@ -218,6 +223,7 @@ def process_usr_for_liked(usr_id, folder: str, page_token: str = None,
             tweet_count += tweets
             if halt > 0:
                 break
+            mutils.printv("Reached the end of API response, moving on to next page...", verbose=is_verbose)
     except twab.UnsuccessfulRequestError:
         halt = 1
 
@@ -307,9 +313,11 @@ def main(username, folder = None, page_token = None, ignore_processed = False, v
 
     halt, img_count, tweet_count = process_usr_for_liked(usr_id, final_folder, page_token, ignore_processed)
 
-    pd.set_data(id, "liked_tweets.count", set_func=(lambda x: x + tweet_count))
-    pd.set_data(id, "imgs_downloaded", set_func=(lambda x: x + img_count))
-    pd.set_data(id, "requests_made", set_func=(lambda x: x + twab.requests_count))
+    pd.set_data(usr_id, "liked_tweets.count", set_func=(lambda x: x + tweet_count))
+    pd.set_data(usr_id, "imgs_downloaded", set_func=(lambda x: x + img_count))
+    pd.set_data(usr_id, "requests_made", set_func=(lambda x: x + twab.requests_count))
+    pd.save_to_file()
+    kth.save_to_file(usr_id, new_processed_tweets[::-1])
 
     print("Total request count: %s/%s"%(twab.requests_count, twab.max_requests))
     print("Total images downloaded:", img_count)

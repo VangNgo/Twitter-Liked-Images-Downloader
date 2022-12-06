@@ -3,6 +3,11 @@ import datetime
 def add_one(x):
     return x + 1
 
+def index_of_last_slash(str_val: str) -> int:
+    fs = str_val.rfind("/")
+    bs = str_val.rfind("\\")
+    return max(fs, bs)
+
 def today(only_numeric: bool = False) -> str:
     """
     Fetches the current date.
